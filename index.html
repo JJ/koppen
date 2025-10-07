@@ -269,31 +269,22 @@
                 // If TMA * 24 >= Precipitation → Zone B
                 if (annual * 24 >= annualPrecip) {
                     zone = 'B';
-                    // Further classify B zones
-                    let threshold;
-                    if (pattern === 'dry') {
-                        threshold = 20 * annual;
-                    } else if (pattern === 'wet') {
-                        threshold = 20 * annual + 280;
-                    } else if (pattern === 'even') {
-                        threshold = 20 * annual + 140;
-                    }
-                    
-                    if (threshold !== undefined && annualPrecip < threshold) {
-                        if (annualPrecip < threshold / 2) {
-                            // Desert (BW)
-                            if (annual >= 18) {
-                                zone = 'BWh';
-                            } else {
-                                zone = 'BWk';
-                            }
+                    // Further classify B zones using Köppen formula
+                    // If PMA > TMA × 12 → BS (Steppe)
+                    // If PMA < TMA × 12 → BW (Desert)
+                    if (annualPrecip > annual * 12) {
+                        // Steppe (BS)
+                        if (annual >= 18) {
+                            zone = 'BSh';
                         } else {
-                            // Steppe (BS)
-                            if (annual >= 18) {
-                                zone = 'BSh';
-                            } else {
-                                zone = 'BSk';
-                            }
+                            zone = 'BSk';
+                        }
+                    } else {
+                        // Desert (BW)
+                        if (annual >= 18) {
+                            zone = 'BWh';
+                        } else {
+                            zone = 'BWk';
                         }
                     }
                 }
@@ -430,8 +421,9 @@
                 const annualPrecip = climateData.annualPrecip;
                 
                 // If zone B (TMA * 24 >= Precipitation)
+                // No additional prompts needed for B zone
                 if (annual * 24 >= annualPrecip) {
-                    showQuestion('q-precipitation-pattern');
+                    // B zone determined, no additional questions needed
                 }
                 // If zone A (TMA >= 18 and not zone B)
                 else if (annual >= 18) {
