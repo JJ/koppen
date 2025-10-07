@@ -178,41 +178,17 @@
                 <div class="hint">Ingrese la temperatura media del mes más cálido en grados Celsius</div>
             </div>
 
-            <div id="q-precipitation-pattern" class="question">
-                <label>What is the precipitation pattern?</label>
-                <select id="precipitation-pattern">
-                    <option value="">Select pattern...</option>
-                    <option value="dry">At least 70% of annual precipitation in summer (Dry winter)</option>
-                    <option value="wet">At least 70% of annual precipitation in winter (Dry summer)</option>
-                    <option value="even">Neither of the above (Even distribution)</option>
-                </select>
-            </div>
-
-            <div id="q-driest-month" class="question">
-                <label>What is the precipitation of the driest month?</label>
-                <input type="number" id="driest-month-precip" step="1" placeholder="Enter precipitation in mm">
-                <div class="hint">Enter the precipitation of the driest month in millimeters</div>
-            </div>
-
-            <div id="q-dry-season" class="question">
-                <label>When is the dry season?</label>
-                <select id="dry-season">
-                    <option value="">Select season...</option>
-                    <option value="summer">Summer (high-sun season)</option>
-                    <option value="winter">Winter (low-sun season)</option>
-                </select>
-            </div>
-
             <div id="q-months-above-10" class="question">
-                <label>How many months have average temperature above 10°C?</label>
+                <label>¿Cuantos meses tienen una temperatura por encima de 10°C?</label>
                 <input type="number" id="months-above-10" min="0" max="12" step="1" placeholder="Enter number of months">
-                <div class="hint">Count the number of months with average temperature above 10°C</div>
+                <div class="hint">Cuenta los meses con temperatura por encima de 10°C</div>
             </div>
         </div>
 
         <div class="result-section">
             <div class="climate-zone" id="climate-zone">?</div>
-            <div class="climate-name" id="climate-name">Answer the questions to determine your climate zone</div>
+            <div class="climate-name" id="climate-name">Contesta las preguntas
+            para determinar la zona climática de Köppen</div>
         </div>
     </div>
 
