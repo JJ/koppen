@@ -183,6 +183,32 @@
                 <input type="number" id="months-above-10" min="0" max="12" step="1" placeholder="Enter number of months">
                 <div class="hint">Cuenta los meses con temperatura por encima de 10°C</div>
             </div>
+
+            <div id="q-driest-month" class="question">
+                <label>Precipitaciones mes más seco (PMMS) (mm)</label>
+                <input type="number" id="driest-month-precip" step="1" placeholder="Ingrese precipitación en mm">
+                <div class="hint">Ingrese la precipitación del mes más seco en milímetros</div>
+            </div>
+
+            <div id="q-dry-season" class="question">
+                <label>¿Está el mes más seco en verano o en invierno?</label>
+                <select id="dry-season">
+                    <option value="">Seleccione...</option>
+                    <option value="summer">Verano</option>
+                    <option value="winter">Invierno</option>
+                </select>
+                <div class="hint">Seleccione la estación del mes más seco</div>
+            </div>
+
+            <div id="q-precipitation-pattern" class="question">
+                <label>Patrón de precipitación</label>
+                <select id="precipitation-pattern">
+                    <option value="">Seleccione...</option>
+                    <option value="wet">Verano húmedo</option>
+                    <option value="dry">Verano seco</option>
+                </select>
+                <div class="hint">Seleccione el patrón de precipitación dominante</div>
+            </div>
         </div>
 
         <div class="result-section">
@@ -428,7 +454,7 @@
                 // If zone A (TMA >= 18 and not zone B)
                 else if (annual >= 18) {
                     showQuestion('q-driest-month');
-                    showQuestion('q-dry-season');
+                    // Don't show dry season yet - wait for driest month value
                 }
                 // Otherwise need coldest and warmest month temps
                 else {
@@ -471,6 +497,24 @@
 
         document.getElementById('driest-month-precip').addEventListener('input', (e) => {
             climateData.driestMonthPrecip = parseFloat(e.target.value) || null;
+            
+            // For zone A, show dry season question only if needed
+            if (climateData.annualTemp !== null && climateData.annualPrecip !== null) {
+                const annual = climateData.annualTemp;
+                const annualPrecip = climateData.annualPrecip;
+                const driest = climateData.driestMonthPrecip;
+                
+                // If zone A (TMA >= 18 and not zone B)
+                if (annual >= 18 && annual * 24 < annualPrecip) {
+                    // Show dry season question only if:
+                    // - driest < 60 (not Af) AND
+                    // - driest < 100 - (annualPrecip/25) (not Am)
+                    if (driest !== null && driest < 60 && driest < 100 - (annualPrecip / 25)) {
+                        showQuestion('q-dry-season');
+                    }
+                }
+            }
+            
             updateDisplay();
         });
 
