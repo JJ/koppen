@@ -229,6 +229,36 @@
                 </select>
                 <div class="hint">Determine si hay sequía en invierno</div>
             </div>
+
+            <div id="q-warm-month-above-22" class="question">
+                <label>¿Hay algún mes cálido con temperatura media mensual mayor de 22º?</label>
+                <select id="warm-month-above-22">
+                    <option value="">Seleccione...</option>
+                    <option value="yes">Sí</option>
+                    <option value="no">No</option>
+                </select>
+                <div class="hint">Determine si hay algún mes con temperatura media mensual mayor de 22°C</div>
+            </div>
+
+            <div id="q-four-months-above-10" class="question">
+                <label>¿Hay al menos 4 meses con temperatura media mensual &gt;= 10º?</label>
+                <select id="four-months-above-10">
+                    <option value="">Seleccione...</option>
+                    <option value="yes">Sí</option>
+                    <option value="no">No</option>
+                </select>
+                <div class="hint">Determine si hay al menos 4 meses con temperatura media mensual >= 10°C</div>
+            </div>
+
+            <div id="q-coldest-below-minus-38" class="question">
+                <label>¿El mes más frío es menor de -38º?</label>
+                <select id="coldest-below-minus-38">
+                    <option value="">Seleccione...</option>
+                    <option value="yes">Sí</option>
+                    <option value="no">No</option>
+                </select>
+                <div class="hint">Determine si el mes más frío tiene temperatura menor de -38°C</div>
+            </div>
         </div>
 
         <div class="result-section">
@@ -256,12 +286,15 @@
             'Csa': 'Hot-Summer Mediterranean',
             'Csb': 'Warm-Summer Mediterranean',
             'Csc': 'Cool-Summer Mediterranean',
+            'Csd': 'Very Cold Summer Mediterranean',
             'Cwa': 'Humid Subtropical (dry winter)',
             'Cwb': 'Subtropical Highland (dry winter)',
             'Cwc': 'Cold Subtropical Highland (dry winter)',
+            'Cwd': 'Very Cold Subtropical Highland (dry winter)',
             'Cfa': 'Humid Subtropical',
             'Cfb': 'Oceanic',
             'Cfc': 'Subpolar Oceanic',
+            'Cfd': 'Very Cold Subpolar Oceanic',
             'Dsa': 'Hot-Summer Continental Mediterranean',
             'Dsb': 'Warm-Summer Continental Mediterranean',
             'Dsc': 'Subarctic Mediterranean',
@@ -288,7 +321,10 @@
             winterDry: null,
             drySeason: null,
             monthsAbove10: null,
-            alwaysAbove60: null
+            alwaysAbove60: null,
+            warmMonthAbove22: null,
+            fourMonthsAbove10: null,
+            coldestBelowMinus38: null
         };
 
         // Question flow control
@@ -367,32 +403,77 @@
                         
                         // Check if summer is dry (Cs)
                         if (summerDry === 'yes') {
-                            if (warmest >= 22) {
-                                zone = 'Csa';
-                            } else if (monthsAbove10 >= 4) {
-                                zone = 'Csb';
-                            } else {
-                                zone = 'Csc';
+                            // Use new questions for third letter determination
+                            const warmAbove22 = climateData.warmMonthAbove22;
+                            const fourAbove10 = climateData.fourMonthsAbove10;
+                            const coldBelowMinus38 = climateData.coldestBelowMinus38;
+                            
+                            if (warmAbove22 === 'yes') {
+                                if (fourAbove10 === 'yes') {
+                                    zone = 'Csa';
+                                } else if (fourAbove10 === 'no') {
+                                    zone = 'Csb';
+                                } else {
+                                    zone = 'Cs';
+                                }
+                            } else if (warmAbove22 === 'no') {
+                                if (coldBelowMinus38 === 'no') {
+                                    zone = 'Csc';
+                                } else if (coldBelowMinus38 === 'yes') {
+                                    zone = 'Csd';
+                                } else {
+                                    zone = 'Cs';
+                                }
                             }
                         }
                         // Check if winter is dry (Cw)
                         else if (summerDry === 'no' && winterDry === 'yes') {
-                            if (warmest >= 22) {
-                                zone = 'Cwa';
-                            } else if (monthsAbove10 >= 4) {
-                                zone = 'Cwb';
-                            } else {
-                                zone = 'Cwc';
+                            // Use new questions for third letter determination
+                            const warmAbove22 = climateData.warmMonthAbove22;
+                            const fourAbove10 = climateData.fourMonthsAbove10;
+                            const coldBelowMinus38 = climateData.coldestBelowMinus38;
+                            
+                            if (warmAbove22 === 'yes') {
+                                if (fourAbove10 === 'yes') {
+                                    zone = 'Cwa';
+                                } else if (fourAbove10 === 'no') {
+                                    zone = 'Cwb';
+                                } else {
+                                    zone = 'Cw';
+                                }
+                            } else if (warmAbove22 === 'no') {
+                                if (coldBelowMinus38 === 'no') {
+                                    zone = 'Cwc';
+                                } else if (coldBelowMinus38 === 'yes') {
+                                    zone = 'Cwd';
+                                } else {
+                                    zone = 'Cw';
+                                }
                             }
                         }
                         // Neither summer nor winter is dry (Cf)
                         else if (summerDry === 'no' && winterDry === 'no') {
-                            if (warmest >= 22) {
-                                zone = 'Cfa';
-                            } else if (monthsAbove10 >= 4) {
-                                zone = 'Cfb';
-                            } else {
-                                zone = 'Cfc';
+                            // Use new questions for third letter determination
+                            const warmAbove22 = climateData.warmMonthAbove22;
+                            const fourAbove10 = climateData.fourMonthsAbove10;
+                            const coldBelowMinus38 = climateData.coldestBelowMinus38;
+                            
+                            if (warmAbove22 === 'yes') {
+                                if (fourAbove10 === 'yes') {
+                                    zone = 'Cfa';
+                                } else if (fourAbove10 === 'no') {
+                                    zone = 'Cfb';
+                                } else {
+                                    zone = 'Cf';
+                                }
+                            } else if (warmAbove22 === 'no') {
+                                if (coldBelowMinus38 === 'no') {
+                                    zone = 'Cfc';
+                                } else if (coldBelowMinus38 === 'yes') {
+                                    zone = 'Cfd';
+                                } else {
+                                    zone = 'Cf';
+                                }
                             }
                         }
                     }
@@ -402,38 +483,77 @@
                         
                         // Check if summer is dry (Ds)
                         if (summerDry === 'yes') {
-                            if (warmest >= 22) {
-                                zone = 'Dsa';
-                            } else if (monthsAbove10 >= 4) {
-                                zone = 'Dsb';
-                            } else if (coldest > -38) {
-                                zone = 'Dsc';
-                            } else {
-                                zone = 'Dsd';
+                            // Use new questions for third letter determination
+                            const warmAbove22 = climateData.warmMonthAbove22;
+                            const fourAbove10 = climateData.fourMonthsAbove10;
+                            const coldBelowMinus38 = climateData.coldestBelowMinus38;
+                            
+                            if (warmAbove22 === 'yes') {
+                                if (fourAbove10 === 'yes') {
+                                    zone = 'Dsa';
+                                } else if (fourAbove10 === 'no') {
+                                    zone = 'Dsb';
+                                } else {
+                                    zone = 'Ds';
+                                }
+                            } else if (warmAbove22 === 'no') {
+                                if (coldBelowMinus38 === 'no') {
+                                    zone = 'Dsc';
+                                } else if (coldBelowMinus38 === 'yes') {
+                                    zone = 'Dsd';
+                                } else {
+                                    zone = 'Ds';
+                                }
                             }
                         }
                         // Check if winter is dry (Dw)
                         else if (summerDry === 'no' && winterDry === 'yes') {
-                            if (warmest >= 22) {
-                                zone = 'Dwa';
-                            } else if (monthsAbove10 >= 4) {
-                                zone = 'Dwb';
-                            } else if (coldest > -38) {
-                                zone = 'Dwc';
-                            } else {
-                                zone = 'Dwd';
+                            // Use new questions for third letter determination
+                            const warmAbove22 = climateData.warmMonthAbove22;
+                            const fourAbove10 = climateData.fourMonthsAbove10;
+                            const coldBelowMinus38 = climateData.coldestBelowMinus38;
+                            
+                            if (warmAbove22 === 'yes') {
+                                if (fourAbove10 === 'yes') {
+                                    zone = 'Dwa';
+                                } else if (fourAbove10 === 'no') {
+                                    zone = 'Dwb';
+                                } else {
+                                    zone = 'Dw';
+                                }
+                            } else if (warmAbove22 === 'no') {
+                                if (coldBelowMinus38 === 'no') {
+                                    zone = 'Dwc';
+                                } else if (coldBelowMinus38 === 'yes') {
+                                    zone = 'Dwd';
+                                } else {
+                                    zone = 'Dw';
+                                }
                             }
                         }
                         // Neither summer nor winter is dry (Df)
                         else if (summerDry === 'no' && winterDry === 'no') {
-                            if (warmest >= 22) {
-                                zone = 'Dfa';
-                            } else if (monthsAbove10 >= 4) {
-                                zone = 'Dfb';
-                            } else if (coldest > -38) {
-                                zone = 'Dfc';
-                            } else {
-                                zone = 'Dfd';
+                            // Use new questions for third letter determination
+                            const warmAbove22 = climateData.warmMonthAbove22;
+                            const fourAbove10 = climateData.fourMonthsAbove10;
+                            const coldBelowMinus38 = climateData.coldestBelowMinus38;
+                            
+                            if (warmAbove22 === 'yes') {
+                                if (fourAbove10 === 'yes') {
+                                    zone = 'Dfa';
+                                } else if (fourAbove10 === 'no') {
+                                    zone = 'Dfb';
+                                } else {
+                                    zone = 'Df';
+                                }
+                            } else if (warmAbove22 === 'no') {
+                                if (coldBelowMinus38 === 'no') {
+                                    zone = 'Dfc';
+                                } else if (coldBelowMinus38 === 'yes') {
+                                    zone = 'Dfd';
+                                } else {
+                                    zone = 'Df';
+                                }
                             }
                         }
                     }
@@ -565,6 +685,17 @@
             // If summer is not dry, ask about winter
             if (climateData.summerDry === 'no') {
                 showQuestion('q-winter-dry');
+            } else if (climateData.summerDry === 'yes') {
+                // If summer is dry, show the third letter questions for C and D zones
+                if (climateData.coldestMonthTemp !== null && climateData.warmestMonthTemp !== null) {
+                    const coldest = climateData.coldestMonthTemp;
+                    const warmest = climateData.warmestMonthTemp;
+                    
+                    // Check if it's zone C or D
+                    if ((coldest > -3 && coldest < 18 && warmest > 10) || (coldest <= -3 && warmest > 10)) {
+                        showQuestion('q-warm-month-above-22');
+                    }
+                }
             }
             
             updateDisplay();
@@ -572,6 +703,18 @@
 
         document.getElementById('winter-dry').addEventListener('change', (e) => {
             climateData.winterDry = e.target.value || null;
+            
+            // After determining the second letter (s/w/f), show the third letter questions for C and D zones
+            if (climateData.coldestMonthTemp !== null && climateData.warmestMonthTemp !== null) {
+                const coldest = climateData.coldestMonthTemp;
+                const warmest = climateData.warmestMonthTemp;
+                
+                // Check if it's zone C or D
+                if ((coldest > -3 && coldest < 18 && warmest > 10) || (coldest <= -3 && warmest > 10)) {
+                    showQuestion('q-warm-month-above-22');
+                }
+            }
+            
             updateDisplay();
         });
 
@@ -601,6 +744,29 @@
                 }
             }
             
+            updateDisplay();
+        });
+
+        document.getElementById('warm-month-above-22').addEventListener('change', (e) => {
+            climateData.warmMonthAbove22 = e.target.value || null;
+            
+            // Show appropriate follow-up question
+            if (climateData.warmMonthAbove22 === 'yes') {
+                showQuestion('q-four-months-above-10');
+            } else if (climateData.warmMonthAbove22 === 'no') {
+                showQuestion('q-coldest-below-minus-38');
+            }
+            
+            updateDisplay();
+        });
+
+        document.getElementById('four-months-above-10').addEventListener('change', (e) => {
+            climateData.fourMonthsAbove10 = e.target.value || null;
+            updateDisplay();
+        });
+
+        document.getElementById('coldest-below-minus-38').addEventListener('change', (e) => {
+            climateData.coldestBelowMinus38 = e.target.value || null;
             updateDisplay();
         });
 
