@@ -219,6 +219,26 @@
                 </select>
                 <div class="hint">Seleccione el patrón de precipitación dominante</div>
             </div>
+
+            <div id="q-summer-dry-check" class="question">
+                <label>¿Algún mes de verano con precipitaciones menores de dos veces la temperatura mensual?</label>
+                <select id="summer-dry-check">
+                    <option value="">Seleccione...</option>
+                    <option value="yes">Sí</option>
+                    <option value="no">No</option>
+                </select>
+                <div class="hint">Indica si hay un mes de verano seco (precipitación < 2 × temperatura mensual)</div>
+            </div>
+
+            <div id="q-winter-dry-check" class="question">
+                <label>¿Algún mes de invierno con precipitaciones menores de dos veces la temperatura mensual?</label>
+                <select id="winter-dry-check">
+                    <option value="">Seleccione...</option>
+                    <option value="yes">Sí</option>
+                    <option value="no">No</option>
+                </select>
+                <div class="hint">Indica si hay un mes de invierno seco (precipitación < 2 × temperatura mensual)</div>
+            </div>
         </div>
 
         <div class="result-section">
@@ -277,7 +297,9 @@
             precipPattern: null,
             drySeason: null,
             monthsAbove10: null,
-            alwaysAbove60: null
+            alwaysAbove60: null,
+            summerDryCheck: null,
+            winterDryCheck: null
         };
 
         // Question flow control
@@ -387,20 +409,27 @@
                     // Else if TMMMF <= -3 and warmest > 10 → Zone D
                     else if (coldest <= -3 && warmest > 10) {
                         zone = 'D';
-                        if (pattern === 'wet' && driest !== null) {
-                            if (driest < 40 && driest < (annualPrecip / 3)) {
-                                if (warmest >= 22) {
-                                    zone = 'Dsa';
-                                } else if (monthsAbove10 >= 4) {
-                                    zone = 'Dsb';
-                                } else if (coldest > -38) {
-                                    zone = 'Dsc';
-                                } else {
-                                    zone = 'Dsd';
-                                }
+                        
+                        // New logic based on issue requirements
+                        const summerDry = climateData.summerDryCheck;
+                        const winterDry = climateData.winterDryCheck;
+                        
+                        // Check if any summer month with precipitation < 2 * monthly temperature
+                        if (summerDry === 'yes') {
+                            // Ds zones - dry summer
+                            if (warmest >= 22) {
+                                zone = 'Dsa';
+                            } else if (monthsAbove10 >= 4) {
+                                zone = 'Dsb';
+                            } else if (coldest > -38) {
+                                zone = 'Dsc';
+                            } else {
+                                zone = 'Dsd';
                             }
-                        } else if (pattern === 'dry' && driest !== null) {
-                            if (driest < (annualPrecip / 10)) {
+                        } else if (summerDry === 'no' && winterDry !== null) {
+                            // Check winter
+                            if (winterDry === 'yes') {
+                                // Dw zones - dry winter
                                 if (warmest >= 22) {
                                     zone = 'Dwa';
                                 } else if (monthsAbove10 >= 4) {
@@ -410,9 +439,21 @@
                                 } else {
                                     zone = 'Dwd';
                                 }
+                            } else if (winterDry === 'no') {
+                                // Df zones - fully humid
+                                if (warmest >= 22) {
+                                    zone = 'Dfa';
+                                } else if (monthsAbove10 >= 4) {
+                                    zone = 'Dfb';
+                                } else if (coldest > -38) {
+                                    zone = 'Dfc';
+                                } else {
+                                    zone = 'Dfd';
+                                }
                             }
                         }
-
+                        
+                        // Fallback to Df if we don't have the new questions answered yet
                         if (zone === 'D') {
                             if (warmest >= 22) {
                                 zone = 'Dfa';
@@ -488,6 +529,11 @@
                 if (climateData.warmestMonthTemp > 10) {
                     showQuestion('q-driest-month');
                     showQuestion('q-months-above-10');
+                    
+                    // For zone D, show summer dry check question
+                    if (climateData.coldestMonthTemp <= -3) {
+                        showQuestion('q-summer-dry-check');
+                    }
                 }
             }
 
@@ -502,6 +548,11 @@
                 if (climateData.warmestMonthTemp > 10) {
                     showQuestion('q-driest-month');
                     showQuestion('q-months-above-10');
+                    
+                    // For zone D, show summer dry check question
+                    if (climateData.coldestMonthTemp <= -3) {
+                        showQuestion('q-summer-dry-check');
+                    }
                 }
             }
 
@@ -562,6 +613,22 @@
                 }
             }
             
+            updateDisplay();
+        });
+
+        document.getElementById('summer-dry-check').addEventListener('change', (e) => {
+            climateData.summerDryCheck = e.target.value || null;
+            
+            // If summer is NOT dry, show winter dry check question
+            if (climateData.summerDryCheck === 'no') {
+                showQuestion('q-winter-dry-check');
+            }
+            
+            updateDisplay();
+        });
+
+        document.getElementById('winter-dry-check').addEventListener('change', (e) => {
+            climateData.winterDryCheck = e.target.value || null;
             updateDisplay();
         });
 
