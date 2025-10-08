@@ -292,6 +292,36 @@ test.describe('Köppen Climate Zone Calculator', () => {
       const name = await page.textContent('#climate-name');
       expect(name).toBe('Oceanic');
     });
+
+    test('should classify New York as Cfa (Humid Subtropical)', async ({ page }) => {
+      await page.goto(BASE_URL);
+      
+      // New York data from the issue
+      await page.fill('#annual-temp', '12.5');
+      await page.fill('#annual-precip', '1124');
+      
+      // Not all months above 18°C
+      await page.selectOption('#all-months-above-18', 'no');
+      
+      await page.fill('#coldest-month-temp', '-0.5');
+      await page.fill('#warmest-month-temp', '24.5');
+      
+      // 6 months above 10°C (>= 4, so should be 'a' not 'b')
+      await page.fill('#months-above-10', '6');
+      
+      // No dry season
+      await page.selectOption('#summer-dry', 'no');
+      await page.selectOption('#winter-dry', 'no');
+      
+      // Warmest month > 22°C
+      await page.selectOption('#warm-month-above-22', 'yes');
+      
+      const zone = await page.textContent('#climate-zone');
+      expect(zone).toBe('Cfa');
+      
+      const name = await page.textContent('#climate-name');
+      expect(name).toBe('Humid Subtropical');
+    });
   });
 
   // Zone D (Continental) Tests
