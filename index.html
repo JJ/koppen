@@ -153,7 +153,7 @@
     <div class="container">
         <div class="input-section">
             <h1>Calculador de zona de clima de Köppen</h1>
-            
+
             <div id="q-annual-temp" class="question visible">
                 <label>Temperatura Media Anual (°C)</label>
                 <input type="number" id="annual-temp" step="0.1" placeholder="Ingrese temperatura en °C">
@@ -255,7 +255,7 @@
             'Dfc': 'Subarctic',
             'Dfd': 'Subarctic (very cold winter)',
             'ET': 'Tundra',
-            'EF': 'Ice Cap'
+            'EF': 'Casquete polar'
         };
 
         let climateData = {
@@ -360,7 +360,7 @@
                                 }
                             }
                         }
-                        
+
                         if (zone === 'C') {
                             if (warmest >= 22) {
                                 zone = 'Cfa';
@@ -399,7 +399,7 @@
                                 }
                             }
                         }
-                        
+
                         if (zone === 'D') {
                             if (warmest >= 22) {
                                 zone = 'Dfa';
@@ -440,12 +440,12 @@
 
         document.getElementById('annual-precip').addEventListener('input', (e) => {
             climateData.annualPrecip = parseFloat(e.target.value) || null;
-            
+
             // Show additional questions based on the zone determination
             if (climateData.annualTemp !== null && climateData.annualPrecip !== null) {
                 const annual = climateData.annualTemp;
                 const annualPrecip = climateData.annualPrecip;
-                
+
                 // If zone B (TMA * 24 >= Precipitation)
                 // No additional prompts needed for B zone
                 if (annual * 24 >= annualPrecip) {
@@ -463,13 +463,13 @@
                     showQuestion('q-precipitation-pattern');
                 }
             }
-            
+
             updateDisplay();
         });
 
         document.getElementById('coldest-month-temp').addEventListener('input', (e) => {
             climateData.coldestMonthTemp = parseFloat(e.target.value) || null;
-            
+
             if (climateData.coldestMonthTemp !== null && climateData.warmestMonthTemp !== null) {
                 // Show additional questions for C and D zones
                 if (climateData.warmestMonthTemp > 10) {
@@ -477,13 +477,13 @@
                     showQuestion('q-months-above-10');
                 }
             }
-            
+
             updateDisplay();
         });
 
         document.getElementById('warmest-month-temp').addEventListener('input', (e) => {
             climateData.warmestMonthTemp = parseFloat(e.target.value) || null;
-            
+
             if (climateData.warmestMonthTemp !== null && climateData.coldestMonthTemp !== null) {
                 // Show additional questions for C and D zones
                 if (climateData.warmestMonthTemp > 10) {
@@ -491,19 +491,19 @@
                     showQuestion('q-months-above-10');
                 }
             }
-            
+
             updateDisplay();
         });
 
         document.getElementById('driest-month-precip').addEventListener('input', (e) => {
             climateData.driestMonthPrecip = parseFloat(e.target.value) || null;
-            
+
             // For zone A, show dry season question only if needed
             if (climateData.annualTemp !== null && climateData.annualPrecip !== null) {
                 const annual = climateData.annualTemp;
                 const annualPrecip = climateData.annualPrecip;
                 const driest = climateData.driestMonthPrecip;
-                
+
                 // If zone A (TMA >= 18 and not zone B)
                 if (annual >= 18 && annual * 24 < annualPrecip) {
                     // Show dry season question only if:
@@ -514,7 +514,7 @@
                     }
                 }
             }
-            
+
             updateDisplay();
         });
 
