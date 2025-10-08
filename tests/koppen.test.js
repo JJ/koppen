@@ -249,7 +249,7 @@ test.describe('Köppen Climate Zone Calculator', () => {
     test('should classify as Dfa (Hot-Summer Humid Continental)', async ({ page }) => {
       await page.goto(BASE_URL);
       
-      await page.fill('#annual-temp', '8');
+      await page.fill('#annual-temp', '11');
       await page.fill('#annual-precip', '900');
       
       // Zone D criteria: coldest <= -3, warmest > 10
@@ -297,7 +297,7 @@ test.describe('Köppen Climate Zone Calculator', () => {
     test('should classify as Dwa (Hot-Summer Humid Continental - dry winter)', async ({ page }) => {
       await page.goto(BASE_URL);
       
-      await page.fill('#annual-temp', '7');
+      await page.fill('#annual-temp', '10');
       await page.fill('#annual-precip', '600');
       
       await page.fill('#coldest-month-temp', '-12');
