@@ -1,0 +1,17 @@
+{
+  "name": "koppen",
+  "version": "1.0.0",
+  "description": "Interactive web calculator for determining Köppen climate classification zones based on climate variables.",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}
