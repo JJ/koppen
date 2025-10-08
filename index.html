@@ -250,16 +250,6 @@
                 <div class="hint">Determine si hay algún mes con temperatura media mensual mayor de 22°C</div>
             </div>
 
-            <div id="q-four-months-above-10" class="question">
-                <label>¿Hay al menos 4 meses con temperatura media mensual &gt;= 10º?</label>
-                <select id="four-months-above-10">
-                    <option value="">Seleccione...</option>
-                    <option value="yes">Sí</option>
-                    <option value="no">No</option>
-                </select>
-                <div class="hint">Determine si hay al menos 4 meses con temperatura media mensual >= 10°C</div>
-            </div>
-
             <div id="q-coldest-below-minus-38" class="question">
                 <label>¿El mes más frío es menor de -38º?</label>
                 <select id="coldest-below-minus-38">
@@ -334,7 +324,6 @@
             allMonthsAbove18: null,
             alwaysAbove60: null,
             warmMonthAbove22: null,
-            fourMonthsAbove10: null,
             coldestBelowMinus38: null
         };
 
@@ -425,13 +414,13 @@
                         if (summerDry === 'yes') {
                             // Use new questions for third letter determination
                             const warmAbove22 = climateData.warmMonthAbove22;
-                            const fourAbove10 = climateData.fourMonthsAbove10;
+                            const monthsAbove10 = climateData.monthsAbove10;
                             const coldBelowMinus38 = climateData.coldestBelowMinus38;
                             
                             if (warmAbove22 === 'yes') {
-                                if (fourAbove10 === 'yes') {
+                                if (monthsAbove10 !== null && monthsAbove10 >= 4) {
                                     zone = 'Csa';
-                                } else if (fourAbove10 === 'no') {
+                                } else if (monthsAbove10 !== null && monthsAbove10 < 4) {
                                     zone = 'Csb';
                                 } else {
                                     zone = 'Cs';
@@ -450,13 +439,13 @@
                         else if (summerDry === 'no' && winterDry === 'yes') {
                             // Use new questions for third letter determination
                             const warmAbove22 = climateData.warmMonthAbove22;
-                            const fourAbove10 = climateData.fourMonthsAbove10;
+                            const monthsAbove10 = climateData.monthsAbove10;
                             const coldBelowMinus38 = climateData.coldestBelowMinus38;
                             
                             if (warmAbove22 === 'yes') {
-                                if (fourAbove10 === 'yes') {
+                                if (monthsAbove10 !== null && monthsAbove10 >= 4) {
                                     zone = 'Cwa';
-                                } else if (fourAbove10 === 'no') {
+                                } else if (monthsAbove10 !== null && monthsAbove10 < 4) {
                                     zone = 'Cwb';
                                 } else {
                                     zone = 'Cw';
@@ -475,13 +464,13 @@
                         else if (summerDry === 'no' && winterDry === 'no') {
                             // Use new questions for third letter determination
                             const warmAbove22 = climateData.warmMonthAbove22;
-                            const fourAbove10 = climateData.fourMonthsAbove10;
+                            const monthsAbove10 = climateData.monthsAbove10;
                             const coldBelowMinus38 = climateData.coldestBelowMinus38;
                             
                             if (warmAbove22 === 'yes') {
-                                if (fourAbove10 === 'yes') {
+                                if (monthsAbove10 !== null && monthsAbove10 >= 4) {
                                     zone = 'Cfa';
-                                } else if (fourAbove10 === 'no') {
+                                } else if (monthsAbove10 !== null && monthsAbove10 < 4) {
                                     zone = 'Cfb';
                                 } else {
                                     zone = 'Cf';
@@ -505,13 +494,13 @@
                         if (summerDry === 'yes') {
                             // Use new questions for third letter determination
                             const warmAbove22 = climateData.warmMonthAbove22;
-                            const fourAbove10 = climateData.fourMonthsAbove10;
+                            const monthsAbove10 = climateData.monthsAbove10;
                             const coldBelowMinus38 = climateData.coldestBelowMinus38;
                             
                             if (warmAbove22 === 'yes') {
-                                if (fourAbove10 === 'yes') {
+                                if (monthsAbove10 !== null && monthsAbove10 >= 4) {
                                     zone = 'Dsa';
-                                } else if (fourAbove10 === 'no') {
+                                } else if (monthsAbove10 !== null && monthsAbove10 < 4) {
                                     zone = 'Dsb';
                                 } else {
                                     zone = 'Ds';
@@ -530,13 +519,13 @@
                         else if (summerDry === 'no' && winterDry === 'yes') {
                             // Use new questions for third letter determination
                             const warmAbove22 = climateData.warmMonthAbove22;
-                            const fourAbove10 = climateData.fourMonthsAbove10;
+                            const monthsAbove10 = climateData.monthsAbove10;
                             const coldBelowMinus38 = climateData.coldestBelowMinus38;
                             
                             if (warmAbove22 === 'yes') {
-                                if (fourAbove10 === 'yes') {
+                                if (monthsAbove10 !== null && monthsAbove10 >= 4) {
                                     zone = 'Dwa';
-                                } else if (fourAbove10 === 'no') {
+                                } else if (monthsAbove10 !== null && monthsAbove10 < 4) {
                                     zone = 'Dwb';
                                 } else {
                                     zone = 'Dw';
@@ -555,13 +544,13 @@
                         else if (summerDry === 'no' && winterDry === 'no') {
                             // Use new questions for third letter determination
                             const warmAbove22 = climateData.warmMonthAbove22;
-                            const fourAbove10 = climateData.fourMonthsAbove10;
+                            const monthsAbove10 = climateData.monthsAbove10;
                             const coldBelowMinus38 = climateData.coldestBelowMinus38;
                             
                             if (warmAbove22 === 'yes') {
-                                if (fourAbove10 === 'yes') {
+                                if (monthsAbove10 !== null && monthsAbove10 >= 4) {
                                     zone = 'Dfa';
-                                } else if (fourAbove10 === 'no') {
+                                } else if (monthsAbove10 !== null && monthsAbove10 < 4) {
                                     zone = 'Dfb';
                                 } else {
                                     zone = 'Df';
@@ -771,17 +760,10 @@
             climateData.warmMonthAbove22 = e.target.value || null;
             
             // Show appropriate follow-up question
-            if (climateData.warmMonthAbove22 === 'yes') {
-                showQuestion('q-four-months-above-10');
-            } else if (climateData.warmMonthAbove22 === 'no') {
+            if (climateData.warmMonthAbove22 === 'no') {
                 showQuestion('q-coldest-below-minus-38');
             }
             
-            updateDisplay();
-        });
-
-        document.getElementById('four-months-above-10').addEventListener('change', (e) => {
-            climateData.fourMonthsAbove10 = e.target.value || null;
             updateDisplay();
         });
 

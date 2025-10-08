@@ -190,12 +190,14 @@ test.describe('Köppen Climate Zone Calculator', () => {
       await page.fill('#coldest-month-temp', '5');
       await page.fill('#warmest-month-temp', '28');
       
+      // Enter number of months above 10°C
+      await page.fill('#months-above-10', '6');
+      
       // Summer is dry
       await page.selectOption('#summer-dry', 'yes');
       
       // Answer third letter questions
       await page.selectOption('#warm-month-above-22', 'yes');
-      await page.selectOption('#four-months-above-10', 'yes');
       
       const zone = await page.textContent('#climate-zone');
       expect(zone).toBe('Csa');
@@ -216,13 +218,15 @@ test.describe('Köppen Climate Zone Calculator', () => {
       await page.fill('#coldest-month-temp', '6');
       await page.fill('#warmest-month-temp', '26');
       
+      // Enter number of months above 10°C
+      await page.fill('#months-above-10', '8');
+      
       // Summer is not dry, winter is dry
       await page.selectOption('#summer-dry', 'no');
       await page.selectOption('#winter-dry', 'yes');
       
       // Answer third letter questions
       await page.selectOption('#warm-month-above-22', 'yes');
-      await page.selectOption('#four-months-above-10', 'yes');
       
       const zone = await page.textContent('#climate-zone');
       expect(zone).toBe('Cwa');
@@ -243,13 +247,15 @@ test.describe('Köppen Climate Zone Calculator', () => {
       await page.fill('#coldest-month-temp', '3');
       await page.fill('#warmest-month-temp', '24');
       
+      // Enter number of months above 10°C
+      await page.fill('#months-above-10', '7');
+      
       // Neither summer nor winter is dry
       await page.selectOption('#summer-dry', 'no');
       await page.selectOption('#winter-dry', 'no');
       
       // Answer third letter questions
       await page.selectOption('#warm-month-above-22', 'yes');
-      await page.selectOption('#four-months-above-10', 'yes');
       
       const zone = await page.textContent('#climate-zone');
       expect(zone).toBe('Cfa');
@@ -270,19 +276,51 @@ test.describe('Köppen Climate Zone Calculator', () => {
       await page.fill('#coldest-month-temp', '2');
       await page.fill('#warmest-month-temp', '23');
       
+      // Enter number of months above 10°C (fewer than 4)
+      await page.fill('#months-above-10', '3');
+      
       // No dry season
       await page.selectOption('#summer-dry', 'no');
       await page.selectOption('#winter-dry', 'no');
       
       // Answer third letter questions - warmest is 23 (> 22), but fewer than 4 months >= 10
       await page.selectOption('#warm-month-above-22', 'yes');
-      await page.selectOption('#four-months-above-10', 'no');
       
       const zone = await page.textContent('#climate-zone');
       expect(zone).toBe('Cfb');
       
       const name = await page.textContent('#climate-name');
       expect(name).toBe('Oceanic');
+    });
+
+    test('should classify New York as Cfa (Humid Subtropical)', async ({ page }) => {
+      await page.goto(BASE_URL);
+      
+      // New York data from the issue
+      await page.fill('#annual-temp', '12.5');
+      await page.fill('#annual-precip', '1124');
+      
+      // Not all months above 18°C
+      await page.selectOption('#all-months-above-18', 'no');
+      
+      await page.fill('#coldest-month-temp', '-0.5');
+      await page.fill('#warmest-month-temp', '24.5');
+      
+      // 6 months above 10°C (>= 4, so should be 'a' not 'b')
+      await page.fill('#months-above-10', '6');
+      
+      // No dry season
+      await page.selectOption('#summer-dry', 'no');
+      await page.selectOption('#winter-dry', 'no');
+      
+      // Warmest month > 22°C
+      await page.selectOption('#warm-month-above-22', 'yes');
+      
+      const zone = await page.textContent('#climate-zone');
+      expect(zone).toBe('Cfa');
+      
+      const name = await page.textContent('#climate-name');
+      expect(name).toBe('Humid Subtropical');
     });
   });
 
@@ -301,13 +339,15 @@ test.describe('Köppen Climate Zone Calculator', () => {
       await page.fill('#coldest-month-temp', '-8');
       await page.fill('#warmest-month-temp', '24');
       
+      // Enter number of months above 10°C
+      await page.fill('#months-above-10', '6');
+      
       // No dry season
       await page.selectOption('#summer-dry', 'no');
       await page.selectOption('#winter-dry', 'no');
       
       // Answer third letter questions
       await page.selectOption('#warm-month-above-22', 'yes');
-      await page.selectOption('#four-months-above-10', 'yes');
       
       const zone = await page.textContent('#climate-zone');
       expect(zone).toBe('Dfa');
@@ -328,12 +368,14 @@ test.describe('Köppen Climate Zone Calculator', () => {
       await page.fill('#coldest-month-temp', '-5');
       await page.fill('#warmest-month-temp', '26');
       
+      // Enter number of months above 10°C
+      await page.fill('#months-above-10', '5');
+      
       // Summer is dry
       await page.selectOption('#summer-dry', 'yes');
       
       // Answer third letter questions
       await page.selectOption('#warm-month-above-22', 'yes');
-      await page.selectOption('#four-months-above-10', 'yes');
       
       const zone = await page.textContent('#climate-zone');
       expect(zone).toBe('Dsa');
@@ -354,13 +396,15 @@ test.describe('Köppen Climate Zone Calculator', () => {
       await page.fill('#coldest-month-temp', '-12');
       await page.fill('#warmest-month-temp', '23');
       
+      // Enter number of months above 10°C
+      await page.fill('#months-above-10', '5');
+      
       // Summer not dry, winter dry
       await page.selectOption('#summer-dry', 'no');
       await page.selectOption('#winter-dry', 'yes');
       
       // Answer third letter questions
       await page.selectOption('#warm-month-above-22', 'yes');
-      await page.selectOption('#four-months-above-10', 'yes');
       
       const zone = await page.textContent('#climate-zone');
       expect(zone).toBe('Dwa');
