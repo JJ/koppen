@@ -166,6 +166,16 @@
                 <div class="hint">Ingrese la precipitación anual total en milímetros</div>
             </div>
 
+            <div id="q-all-months-above-18" class="question">
+                <label>¿Es la temperatura media mensual siempre mayor de 18º?</label>
+                <select id="all-months-above-18">
+                    <option value="">Seleccione...</option>
+                    <option value="yes">Sí</option>
+                    <option value="no">No</option>
+                </select>
+                <div class="hint">Determine si todos los meses tienen temperatura media mayor de 18°C</div>
+            </div>
+
             <div id="q-temp-threshold" class="question">
                 <label>Temperatura Media mes más Frío (°C)</label>
                 <input type="number" id="coldest-month-temp" step="0.1" placeholder="Ingrese temperatura en °C">
@@ -321,6 +331,7 @@
             winterDry: null,
             drySeason: null,
             monthsAbove10: null,
+            allMonthsAbove18: null,
             alwaysAbove60: null,
             warmMonthAbove22: null,
             fourMonthsAbove10: null,
@@ -345,6 +356,7 @@
             const winterDry = climateData.winterDry;
             const drySeason = climateData.drySeason;
             const monthsAbove10 = climateData.monthsAbove10;
+            const allMonthsAbove18 = climateData.allMonthsAbove18;
 
             let zone = '?';
 
@@ -373,8 +385,8 @@
                         }
                     }
                 }
-                // Else if TMA >= 18 → Zone A
-                else if (annual >= 18) {
+                // Check if all months have temp > 18°C → Zone A
+                else if (allMonthsAbove18 === 'yes') {
                     zone = 'A';
                     // Check if all months are always above 60mm
                     const alwaysAbove60 = climateData.alwaysAbove60;
@@ -598,16 +610,9 @@
                 if (annual * 24 >= annualPrecip) {
                     // B zone determined, no additional questions needed
                 }
-                // If zone A (TMA >= 18 and not zone B)
-                else if (annual >= 18) {
-                    showQuestion('q-always-above-60');
-                    // Don't show driest month yet - wait for always-above-60 answer
-                }
-                // Otherwise need coldest and warmest month temps
+                // Otherwise, ask if all months are above 18°C to determine if it's Zone A
                 else {
-                    showQuestion('q-temp-threshold');
-                    showQuestion('q-warmest-month');
-                    // showQuestion('q-precipitation-pattern');
+                    showQuestion('q-all-months-above-18');
                 }
             }
 
@@ -737,16 +742,26 @@
             climateData.alwaysAbove60 = e.target.value || null;
             
             // For zone A, show driest month question only if answer is "no"
-            if (climateData.annualTemp !== null && climateData.annualPrecip !== null) {
-                const annual = climateData.annualTemp;
-                const annualPrecip = climateData.annualPrecip;
-                
-                // If zone A (TMA >= 18 and not zone B)
-                if (annual >= 18 && annual * 24 < annualPrecip) {
-                    if (climateData.alwaysAbove60 === 'no') {
-                        showQuestion('q-driest-month');
-                    }
+            if (climateData.allMonthsAbove18 === 'yes') {
+                if (climateData.alwaysAbove60 === 'no') {
+                    showQuestion('q-driest-month');
                 }
+            }
+            
+            updateDisplay();
+        });
+
+        document.getElementById('all-months-above-18').addEventListener('change', (e) => {
+            climateData.allMonthsAbove18 = e.target.value || null;
+            
+            // If answer is yes, this is Zone A - show the precipitation question
+            if (climateData.allMonthsAbove18 === 'yes') {
+                showQuestion('q-always-above-60');
+            }
+            // If answer is no, need to check coldest and warmest month temps for C, D, E
+            else if (climateData.allMonthsAbove18 === 'no') {
+                showQuestion('q-temp-threshold');
+                showQuestion('q-warmest-month');
             }
             
             updateDisplay();

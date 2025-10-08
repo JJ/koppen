@@ -20,6 +20,9 @@ test.describe('Köppen Climate Zone Calculator', () => {
       // Enter high annual precipitation
       await page.fill('#annual-precip', '2500');
       
+      // All months above 18°C
+      await page.selectOption('#all-months-above-18', 'yes');
+      
       // All months above 60mm
       await page.selectOption('#always-above-60', 'yes');
       
@@ -35,6 +38,9 @@ test.describe('Köppen Climate Zone Calculator', () => {
       
       await page.fill('#annual-temp', '26');
       await page.fill('#annual-precip', '2000');
+      
+      // All months above 18°C
+      await page.selectOption('#all-months-above-18', 'yes');
       
       // Not all months above 60mm
       await page.selectOption('#always-above-60', 'no');
@@ -55,6 +61,9 @@ test.describe('Köppen Climate Zone Calculator', () => {
       await page.fill('#annual-temp', '24');
       await page.fill('#annual-precip', '1200');
       
+      // All months above 18°C
+      await page.selectOption('#all-months-above-18', 'yes');
+      
       await page.selectOption('#always-above-60', 'no');
       await page.fill('#driest-month-precip', '10');
       
@@ -74,6 +83,7 @@ test.describe('Köppen Climate Zone Calculator', () => {
       await page.fill('#annual-temp', '25');
       await page.fill('#annual-precip', '1100');
       
+      await page.selectOption('#all-months-above-18', 'yes');
       await page.selectOption('#always-above-60', 'no');
       await page.fill('#driest-month-precip', '8');
       
@@ -85,6 +95,26 @@ test.describe('Köppen Climate Zone Calculator', () => {
       
       const name = await page.textContent('#climate-name');
       expect(name).toBe('Tropical Savanna (dry summer)');
+    });
+
+    test('should classify Ibagué as Af (Tropical Rainforest)', async ({ page }) => {
+      await page.goto(BASE_URL);
+      
+      // Ibagué data from issue
+      await page.fill('#annual-temp', '22.3');
+      await page.fill('#annual-precip', '1902');
+      
+      // All months above 18°C
+      await page.selectOption('#all-months-above-18', 'yes');
+      
+      // All months above 60mm
+      await page.selectOption('#always-above-60', 'yes');
+      
+      const zone = await page.textContent('#climate-zone');
+      expect(zone).toBe('Af');
+      
+      const name = await page.textContent('#climate-name');
+      expect(name).toBe('Tropical Rainforest');
     });
   });
 
@@ -153,6 +183,9 @@ test.describe('Köppen Climate Zone Calculator', () => {
       await page.fill('#annual-temp', '15');
       await page.fill('#annual-precip', '600');
       
+      // Not all months above 18°C
+      await page.selectOption('#all-months-above-18', 'no');
+      
       // Zone C criteria: coldest > -3 and < 18, warmest > 10
       await page.fill('#coldest-month-temp', '5');
       await page.fill('#warmest-month-temp', '28');
@@ -176,6 +209,9 @@ test.describe('Köppen Climate Zone Calculator', () => {
       
       await page.fill('#annual-temp', '16');
       await page.fill('#annual-precip', '900');
+      
+      // Not all months above 18°C
+      await page.selectOption('#all-months-above-18', 'no');
       
       await page.fill('#coldest-month-temp', '6');
       await page.fill('#warmest-month-temp', '26');
@@ -201,6 +237,9 @@ test.describe('Köppen Climate Zone Calculator', () => {
       await page.fill('#annual-temp', '14');
       await page.fill('#annual-precip', '1100');
       
+      // Not all months above 18°C
+      await page.selectOption('#all-months-above-18', 'no');
+      
       await page.fill('#coldest-month-temp', '3');
       await page.fill('#warmest-month-temp', '24');
       
@@ -224,6 +263,9 @@ test.describe('Köppen Climate Zone Calculator', () => {
       
       await page.fill('#annual-temp', '10');
       await page.fill('#annual-precip', '800');
+      
+      // Not all months above 18°C
+      await page.selectOption('#all-months-above-18', 'no');
       
       await page.fill('#coldest-month-temp', '2');
       await page.fill('#warmest-month-temp', '23');
@@ -252,6 +294,9 @@ test.describe('Köppen Climate Zone Calculator', () => {
       await page.fill('#annual-temp', '11');
       await page.fill('#annual-precip', '900');
       
+      // Not all months above 18°C
+      await page.selectOption('#all-months-above-18', 'no');
+      
       // Zone D criteria: coldest <= -3, warmest > 10
       await page.fill('#coldest-month-temp', '-8');
       await page.fill('#warmest-month-temp', '24');
@@ -277,6 +322,9 @@ test.describe('Köppen Climate Zone Calculator', () => {
       await page.fill('#annual-temp', '10');
       await page.fill('#annual-precip', '500');
       
+      // Not all months above 18°C
+      await page.selectOption('#all-months-above-18', 'no');
+      
       await page.fill('#coldest-month-temp', '-5');
       await page.fill('#warmest-month-temp', '26');
       
@@ -299,6 +347,9 @@ test.describe('Köppen Climate Zone Calculator', () => {
       
       await page.fill('#annual-temp', '10');
       await page.fill('#annual-precip', '600');
+      
+      // Not all months above 18°C
+      await page.selectOption('#all-months-above-18', 'no');
       
       await page.fill('#coldest-month-temp', '-12');
       await page.fill('#warmest-month-temp', '23');
@@ -324,6 +375,10 @@ test.describe('Köppen Climate Zone Calculator', () => {
       // Verjoyansk data from issue
       await page.fill('#annual-temp', '-13.5');
       await page.fill('#annual-precip', '127');
+      
+      // Not all months above 18°C
+      await page.selectOption('#all-months-above-18', 'no');
+      
       await page.fill('#coldest-month-temp', '-44.5');
       await page.fill('#warmest-month-temp', '14');
       
@@ -352,6 +407,9 @@ test.describe('Köppen Climate Zone Calculator', () => {
       await page.fill('#annual-temp', '5');
       await page.fill('#annual-precip', '300');
       
+      // Not all months above 18°C
+      await page.selectOption('#all-months-above-18', 'no');
+      
       // Warmest month 0 < temp < 10
       await page.fill('#coldest-month-temp', '-15');
       await page.fill('#warmest-month-temp', '5');
@@ -368,6 +426,9 @@ test.describe('Köppen Climate Zone Calculator', () => {
       
       await page.fill('#annual-temp', '-5');
       await page.fill('#annual-precip', '100');
+      
+      // Not all months above 18°C
+      await page.selectOption('#all-months-above-18', 'no');
       
       // Warmest month <= 0
       await page.fill('#coldest-month-temp', '-30');
