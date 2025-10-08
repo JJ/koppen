@@ -297,8 +297,8 @@
             'Cfd': 'Very Cold Subpolar Oceanic',
             'Dsa': 'Hot-Summer Continental Mediterranean',
             'Dsb': 'Warm-Summer Continental Mediterranean',
-            'Dsc': 'Subarctic Mediterranean',
-            'Dsd': 'Subarctic Mediterranean (very cold winter)',
+            'Dsc': 'Clima continental templado frío con estación seca en verano e invierno frío',
+            'Dsd': 'Clima continental templado frío con estación seca en verano e invierno extremadamente frío',
             'Dwa': 'Hot-Summer Humid Continental (dry winter)',
             'Dwb': 'Warm-Summer Humid Continental (dry winter)',
             'Dwc': 'Subarctic (dry winter)',
@@ -395,18 +395,18 @@
                         }
                     }
                 }
-                // Else if TMA < 10 → Zone E (Polar)
-                else if (annual < 10) {
-                    if (annual >= 0) {
-                        zone = 'ET';
-                    } else {
-                        zone = 'EF';
-                    }
-                }
                 // Otherwise need coldest and warmest month temps
                 else if (coldest !== null && warmest !== null) {
+                    // Zone E (Polar) - warmest month <= 10
+                    if (warmest <= 10) {
+                        if (warmest > 0) {
+                            zone = 'ET';
+                        } else {
+                            zone = 'EF';
+                        }
+                    }
                     // If TMMMF between -3 and 18 AND TMMMC > 10 → Zone C
-                    if (coldest > -3 && coldest < 18 && warmest > 10) {
+                    else if (coldest > -3 && coldest < 18 && warmest > 10) {
                         zone = 'C';
                         
                         // Check if summer is dry (Cs)

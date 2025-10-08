@@ -317,6 +317,31 @@ test.describe('Köppen Climate Zone Calculator', () => {
       const name = await page.textContent('#climate-name');
       expect(name).toBe('Hot-Summer Humid Continental (dry winter)');
     });
+
+    test('should classify Verjoyansk as Dsd (Subarctic Mediterranean - very cold winter)', async ({ page }) => {
+      await page.goto(BASE_URL);
+      
+      // Verjoyansk data from issue
+      await page.fill('#annual-temp', '-13.5');
+      await page.fill('#annual-precip', '127');
+      await page.fill('#coldest-month-temp', '-44.5');
+      await page.fill('#warmest-month-temp', '14');
+      
+      // Summer is dry (one summer month with precip < 2*temp)
+      await page.selectOption('#summer-dry', 'yes');
+      
+      // No warm month above 22°C
+      await page.selectOption('#warm-month-above-22', 'no');
+      
+      // Coldest month below -38°C
+      await page.selectOption('#coldest-below-minus-38', 'yes');
+      
+      const zone = await page.textContent('#climate-zone');
+      expect(zone).toBe('Dsd');
+      
+      const name = await page.textContent('#climate-name');
+      expect(name).toBe('Clima continental templado frío con estación seca en verano e invierno extremadamente frío');
+    });
   });
 
   // Zone E (Polar) Tests
