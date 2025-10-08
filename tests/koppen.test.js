@@ -340,7 +340,7 @@ test.describe('Köppen Climate Zone Calculator', () => {
       expect(zone).toBe('Dsd');
       
       const name = await page.textContent('#climate-name');
-      expect(name).toBe('Subarctic Mediterranean (very cold winter)');
+      expect(name).toBe('Clima continental templado frío con estación seca en verano e invierno extremadamente frío');
     });
   });
 
