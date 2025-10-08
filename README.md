@@ -33,3 +33,17 @@ The Köppen climate classification system includes:
 - **C (Temperate)**: Csa, Csb, Csc, Cwa, Cwb, Cwc, Cfa, Cfb, Cfc
 - **D (Continental)**: Dsa, Dsb, Dsc, Dsd, Dwa, Dwb, Dwc, Dwd, Dfa, Dfb, Dfc, Dfd
 - **E (Polar)**: ET, EF
+
+## Testing
+
+This project includes comprehensive automated tests using Playwright to verify all climate zones work correctly.
+
+### Run Tests
+```bash
+npm install
+npm test
+```
+
+For more information, see the [tests README](tests/README.md).
+
+Tests are automatically run on CI/CD via GitHub Actions for all commits and pull requests.
