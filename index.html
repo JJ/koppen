@@ -334,9 +334,7 @@
                         zone = 'Af';
                     } else if (alwaysAbove60 === 'no' && driest !== null) {
                         // Further classify A zones if we have driest month data
-                        if (driest >= 60) {
-                            zone = 'Af';
-                        } else if (driest >= 100 - (annualPrecip / 25)) {
+                        if (driest >= 100 - (annualPrecip / 25)) {
                             zone = 'Am';
                         } else {
                             if (drySeason === 'winter') {
