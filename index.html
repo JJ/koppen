@@ -395,6 +395,14 @@
                         }
                     }
                 }
+                // Else if TMA < 10 → Zone E (Polar)
+                else if (annual < 10) {
+                    if (annual >= 0) {
+                        zone = 'ET';
+                    } else {
+                        zone = 'EF';
+                    }
+                }
                 // Otherwise need coldest and warmest month temps
                 else if (coldest !== null && warmest !== null) {
                     // If TMMMF between -3 and 18 AND TMMMC > 10 → Zone C
@@ -557,14 +565,6 @@
                             }
                         }
                     }
-                    // E: Polar (warmest month < 10°C)
-                    else if (warmest < 10) {
-                        if (warmest > 0) {
-                            zone = 'ET';
-                        } else {
-                            zone = 'EF';
-                        }
-                    }
                 }
             }
 
@@ -579,12 +579,14 @@
 
         // Event listeners
         document.getElementById('annual-temp').addEventListener('input', (e) => {
-            climateData.annualTemp = parseFloat(e.target.value) || null;
+            const value = parseFloat(e.target.value);
+            climateData.annualTemp = isNaN(value) ? null : value;
             updateDisplay();
         });
 
         document.getElementById('annual-precip').addEventListener('input', (e) => {
-            climateData.annualPrecip = parseFloat(e.target.value) || null;
+            const value = parseFloat(e.target.value);
+            climateData.annualPrecip = isNaN(value) ? null : value;
 
             // Show additional questions based on the zone determination
             if (climateData.annualTemp !== null && climateData.annualPrecip !== null) {
@@ -613,7 +615,8 @@
         });
 
         document.getElementById('coldest-month-temp').addEventListener('input', (e) => {
-            climateData.coldestMonthTemp = parseFloat(e.target.value) || null;
+            const value = parseFloat(e.target.value);
+            climateData.coldestMonthTemp = isNaN(value) ? null : value;
 
             if (climateData.coldestMonthTemp !== null && climateData.warmestMonthTemp !== null) {
                 // Show additional questions for C and D zones
@@ -635,7 +638,8 @@
         });
 
         document.getElementById('warmest-month-temp').addEventListener('input', (e) => {
-            climateData.warmestMonthTemp = parseFloat(e.target.value) || null;
+            const value = parseFloat(e.target.value);
+            climateData.warmestMonthTemp = isNaN(value) ? null : value;
 
             if (climateData.warmestMonthTemp !== null && climateData.coldestMonthTemp !== null) {
                 // Show additional questions for C and D zones
@@ -657,7 +661,8 @@
         });
 
         document.getElementById('driest-month-precip').addEventListener('input', (e) => {
-            climateData.driestMonthPrecip = parseFloat(e.target.value) || null;
+            const value = parseFloat(e.target.value);
+            climateData.driestMonthPrecip = isNaN(value) ? null : value;
 
             // For zone A, show dry season question only if needed
             if (climateData.annualTemp !== null && climateData.annualPrecip !== null) {
